@@ -1,12 +1,14 @@
 import { Account } from 'src/account/account.model';
+import { Manager } from 'src/manager/manager.model';
 
 export abstract class Client {
   protected abstract _id: string;
   protected abstract _fullname: string;
   protected abstract _address: string;
   protected abstract _telphone: string;
-  protected abstract _manager: any;
+  protected abstract _manager: Manager;
   protected abstract _accounts: Account[];
+  protected abstract _salaryIncome: number;
 
   abstract openAccount(account: Account): void;
   abstract closeAccount(account: Account): void;
@@ -18,10 +20,12 @@ export abstract class Client {
   abstract get telphone(): string;
   abstract get manager(): string;
   abstract get accounts(): Account[];
+  abstract get salaryIncome(): number;
 
   abstract set fullname(fullname: string);
   abstract set address(address: string);
   abstract set telphone(telphone: string);
   abstract set manager(manager: any);
   abstract set accounts(account: Account);
+  abstract set salaryIncome(salary: number);
 }

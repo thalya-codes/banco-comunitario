@@ -1,0 +1,4 @@
+export enum ACCOUNT_TYPE {
+  SAVINGS = 'SAVINGS',
+  TRANSACTION = 'TRANSACTION',
+}

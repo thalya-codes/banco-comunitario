@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { Account } from '../account/account.model';
 import { Client } from './client.model';
+import { NOT_FOUND_ACCOUNT } from 'src/constants';
 
 @Injectable()
 export class ClientService extends Client {
@@ -13,6 +14,7 @@ export class ClientService extends Client {
     protected _telphone: string,
     protected _manager: any,
     protected _accounts: Account[],
+    protected _salaryIncome: number,
   ) {
     super();
   }
@@ -27,7 +29,7 @@ export class ClientService extends Client {
     );
 
     if (foundAccountIndex === -1) {
-      throw new Error('Não foi possível encontrar a conta');
+      throw new Error(NOT_FOUND_ACCOUNT);
     }
 
     account.accountType = newType;
@@ -55,12 +57,20 @@ export class ClientService extends Client {
     return this._telphone;
   }
 
+  get salaryIncome(): number {
+    return this._salaryIncome;
+  }
+
   get manager(): string {
     return this._manager;
   }
 
   get accounts(): Account[] {
     return this._accounts;
+  }
+
+  set salaryIncome(salary: number) {
+    this._salaryIncome = salary;
   }
 
   set accounts(account: Account) {

@@ -1,5 +1,5 @@
 export abstract class Account {
-  protected _balance: number = 0.0;
+  protected _balance: number;
   protected _accountType: string;
   protected _clientId: string;
   protected _accountNumber: string;

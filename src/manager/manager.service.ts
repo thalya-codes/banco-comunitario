@@ -21,7 +21,7 @@ export class ManagerService extends Manager {
       ({ id }) => id === client.id,
     );
 
-    if (!isClientAlreadyExistent) {
+    if (isClientAlreadyExistent) {
       throw new Error(message);
     }
   }

@@ -18,14 +18,14 @@ export abstract class Client {
   abstract get fullname(): string;
   abstract get address(): string;
   abstract get telphone(): string;
-  abstract get manager(): string;
+  abstract get manager(): Manager;
   abstract get accounts(): Account[];
   abstract get salaryIncome(): number;
 
   abstract set fullname(fullname: string);
   abstract set address(address: string);
   abstract set telphone(telphone: string);
-  abstract set manager(manager: any);
+  abstract set manager(manager: Manager);
   abstract set accounts(account: Account);
   abstract set salaryIncome(salary: number);
 }

@@ -4,6 +4,8 @@ import { Manager } from './manager.model';
 import { Client } from 'src/client/client.model';
 import { Account } from 'src/account/account.model';
 import { ACCOUNT_TYPE } from 'src/enums';
+import { TransationAccountService } from 'src/transation-account/transation-account.service';
+import { SavingsAccountService } from 'src/savings_account/savings_account.service';
 import {
   EXISTENT_CLIENT,
   INSUFICIENT_INCOME_SALARY,
@@ -13,7 +15,7 @@ import {
 @Injectable()
 export class ManagerService extends Manager {
   protected _id: string = uuidv4();
-  protected _clients: Client[];
+  protected _clients: Client[] = [];
   protected _fullname: string;
 
   protected verifyIfClientExists(client: Client, message: string): void {
@@ -44,9 +46,9 @@ export class ManagerService extends Manager {
         throw new Error(INSUFICIENT_INCOME_SALARY);
       }
 
-      //instanciar TRANSACTION ACCOUNT
+      account = new TransationAccountService(client.id);
     } else {
-      //instancia SAVINGS ACCOUNT
+      account = new SavingsAccountService(client.id);
     }
 
     client.openAccount(account);

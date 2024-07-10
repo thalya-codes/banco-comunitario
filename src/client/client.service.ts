@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Account } from '../account/account.model';
 import { Client } from './client.model';
 import { NOT_FOUND_ACCOUNT } from 'src/constants';
+import { Manager } from 'src/manager/manager.model';
 
 @Injectable()
 export class ClientService extends Client {
@@ -12,7 +13,7 @@ export class ClientService extends Client {
     protected _fullname: string,
     protected _address: string,
     protected _telphone: string,
-    protected _manager: any,
+    protected _manager: Manager,
     protected _accounts: Account[],
     protected _salaryIncome: number,
   ) {
@@ -61,7 +62,7 @@ export class ClientService extends Client {
     return this._salaryIncome;
   }
 
-  get manager(): string {
+  get manager(): Manager {
     return this._manager;
   }
 
@@ -77,7 +78,7 @@ export class ClientService extends Client {
     this._accounts.push(account);
   }
 
-  set manager(manager: string) {
+  set manager(manager: Manager) {
     this._manager = manager;
   }
 

@@ -1,27 +1,94 @@
-import { Account } from 'src/account/account.model';
+import { v4 as uuidv4 } from 'uuid';
+import { Account } from '../account/account.model';
+import { ClientAbstract } from './client.abstract.model';
+import { NOT_FOUND_ACCOUNT } from 'src/constants';
+import { Manager } from 'src/manager/manager.model';
 
-export abstract class Client {
-  protected abstract _id: string;
-  protected abstract _fullname: string;
-  protected abstract _address: string;
-  protected abstract _telphone: string;
-  protected abstract _manager: any;
-  protected abstract _accounts: Account[];
+export class Client extends ClientAbstract {
+  protected _id: string = uuidv4();
 
-  abstract openAccount(account: Account): void;
-  abstract closeAccount(account: Account): void;
-  abstract alterAccountType(account: Account, newType: string): void;
+  constructor(
+    protected _fullname: string,
+    protected _address: string,
+    protected _telphone: string,
+    protected _manager: Manager,
+    protected _accounts: Account[],
+    protected _salaryIncome: number,
+  ) {
+    super();
+  }
 
-  abstract get id(): string;
-  abstract get fullname(): string;
-  abstract get address(): string;
-  abstract get telphone(): string;
-  abstract get manager(): string;
-  abstract get accounts(): Account[];
+  openAccount(account: Account): void {
+    this._accounts.push(account);
+  }
 
-  abstract set fullname(fullname: string);
-  abstract set address(address: string);
-  abstract set telphone(telphone: string);
-  abstract set manager(manager: any);
-  abstract set accounts(account: Account);
+  alterAccountType(account: Account, newType: string): void {
+    const foundAccountIndex = this._accounts.findIndex(
+      ({ clientId }) => clientId === account.clientId,
+    );
+
+    if (foundAccountIndex === -1) {
+      throw new Error(NOT_FOUND_ACCOUNT);
+    }
+
+    account.accountType = newType;
+  }
+
+  closeAccount(account: Account): void {
+    this._accounts = this._accounts.filter(
+      ({ accountNumber }) => accountNumber !== account.accountNumber,
+    );
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  get fullname(): string {
+    return this._fullname;
+  }
+
+  get address(): string {
+    return this._address;
+  }
+
+  get telphone(): string {
+    return this._telphone;
+  }
+
+  get salaryIncome(): number {
+    return this._salaryIncome;
+  }
+
+  get manager(): Manager {
+    return this._manager;
+  }
+
+  get accounts(): Account[] {
+    return this._accounts;
+  }
+
+  set salaryIncome(salary: number) {
+    this._salaryIncome = salary;
+  }
+
+  set accounts(account: Account) {
+    this._accounts.push(account);
+  }
+
+  set manager(manager: Manager) {
+    this._manager = manager;
+  }
+
+  set telphone(telphone: string) {
+    this._telphone = telphone;
+  }
+
+  set address(address: string) {
+    this._address = address;
+  }
+
+  set fullname(fullname: string) {
+    this._fullname = fullname;
+  }
 }

@@ -1,18 +1,65 @@
-export abstract class Account {
-  protected _balance: number;
+import { HttpException, Injectable } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+import { AccountAbstract } from './account.abstract.model';
+import { INSUFICIENT_BALANCE } from 'src/constants';
+
+@Injectable()
+export class Account extends AccountAbstract {
+  protected _balance: number = 0.0;
   protected _accountType: string;
   protected _clientId: string;
-  protected _accountNumber: string;
 
-  abstract deposit(amount: number): void;
-  abstract withdraw(amount: number): void;
-  abstract verifyBalance(): number;
-  abstract transfer(destination: Account, amount: number): void;
-  abstract generateAccountNumber(): string;
+  constructor(accountType: string, clientId: string) {
+    super();
+    this._accountType = accountType;
+    this._clientId = clientId;
+  }
 
-  abstract set accountType(newType: string);
-  abstract get accountType(): string;
-  abstract get clientId(): string;
-  abstract get accountNumber(): string;
-  abstract set accountNumber(accountNumber: string);
+  deposit(amount: number): void {
+    this._balance += amount;
+  }
+
+  transfer(destination: AccountAbstract, amount: number): void {
+    if (amount > this._balance) {
+      throw new HttpException(INSUFICIENT_BALANCE, 400);
+    }
+
+    destination.deposit(amount);
+    this._balance -= amount;
+  }
+
+  verifyBalance(): number {
+    return this._balance;
+  }
+
+  withdraw(amount: number): void {
+    if (amount > this._balance) {
+      throw new HttpException(INSUFICIENT_BALANCE, 400);
+    }
+    this._balance -= amount;
+  }
+
+  generateAccountNumber(): string {
+    return uuidv4().replace(/-/g, '').slice(0, 13);
+  }
+
+  set accountType(newType: string) {
+    this._accountType = newType;
+  }
+
+  get accountType(): string {
+    return this._accountType;
+  }
+
+  get clientId(): string {
+    return this._clientId;
+  }
+
+  get accountNumber(): string {
+    return this._accountNumber;
+  }
+
+  set accountNumber(accountNumber: string) {
+    this._accountNumber = accountNumber;
+  }
 }

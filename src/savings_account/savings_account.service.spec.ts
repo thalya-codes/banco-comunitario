@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SavingsAccountService } from '../savings_account.model';
+import { SavingsAccountService } from './savings_account.service';
 
 describe('SavingsAccountService', () => {
   let service: SavingsAccountService;

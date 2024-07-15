@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Account } from '../account/account.model';
+import { AccountAbstract } from '../account/account.abstract.model';
 import { ClientAbstract } from './client.abstract.model';
 import { NOT_FOUND_ACCOUNT } from 'src/constants';
 import { Manager } from 'src/manager/manager.model';
@@ -12,17 +12,17 @@ export class Client extends ClientAbstract {
     protected _address: string,
     protected _telphone: string,
     protected _manager: Manager,
-    protected _accounts: Account[],
+    protected _accounts: AccountAbstract[],
     protected _salaryIncome: number,
   ) {
     super();
   }
 
-  openAccount(account: Account): void {
+  openAccount(account: AccountAbstract): void {
     this._accounts.push(account);
   }
 
-  alterAccountType(account: Account, newType: string): void {
+  alterAccountType(account: AccountAbstract, newType: string): void {
     const foundAccountIndex = this._accounts.findIndex(
       ({ clientId }) => clientId === account.clientId,
     );
@@ -34,7 +34,7 @@ export class Client extends ClientAbstract {
     account.accountType = newType;
   }
 
-  closeAccount(account: Account): void {
+  closeAccount(account: AccountAbstract): void {
     this._accounts = this._accounts.filter(
       ({ accountNumber }) => accountNumber !== account.accountNumber,
     );
@@ -64,7 +64,7 @@ export class Client extends ClientAbstract {
     return this._manager;
   }
 
-  get accounts(): Account[] {
+  get accounts(): AccountAbstract[] {
     return this._accounts;
   }
 
@@ -72,7 +72,7 @@ export class Client extends ClientAbstract {
     this._salaryIncome = salary;
   }
 
-  set accounts(account: Account) {
+  set accounts(account: AccountAbstract) {
     this._accounts.push(account);
   }
 

@@ -1,4 +1,4 @@
-import { Account } from 'src/account/account.model';
+import { AccountAbstract } from 'src/account/account.abstract.model';
 import { Client } from 'src/client/client.model';
 
 export abstract class Manager {
@@ -13,10 +13,10 @@ export abstract class Manager {
   abstract addClient(client: Client): void;
   abstract removeClient(client: Client): void;
   abstract openAccount(client: Client, accountType: string): void;
-  abstract closeAccount(client: Client, account: Account): void;
+  abstract closeAccount(client: Client, account: AccountAbstract): void;
   abstract alterAccountType(
     client: Client,
-    account: Account,
+    account: AccountAbstract,
     newType: string,
   ): void;
 }

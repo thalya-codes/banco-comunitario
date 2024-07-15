@@ -1,16 +1,15 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { AccountsService } from './account.service';
+import { TransactionAccountService } from './transaction-account.service';
 
-@Controller('accounts')
-export class AccountsController {
-  constructor(private readonly accountsService: AccountsService) {}
+@Controller('transaction-account')
+export class TransationAccountsController {
+  constructor(
+    private readonly transationAccountsService: TransactionAccountService,
+  ) {}
 
   @Post('create')
-  createAccount(
-    @Body('accountType') accountType: string,
-    @Body('clientId') clientId: string,
-  ): { accountNumber: string } {
-    return this.accountsService.createAccount(accountType, clientId);
+  createAccount(@Body('clientId') clientId: string): { accountNumber: string } {
+    return this.transationAccountsService.createAccount(clientId);
   }
 
   @Post(':accountNumber/deposit')
@@ -18,7 +17,7 @@ export class AccountsController {
     @Param('accountNumber') accountNumber: string,
     @Body('amount') amount: number,
   ): { balance: number } {
-    return this.accountsService.deposit(accountNumber, amount);
+    return this.transationAccountsService.deposit(accountNumber, amount);
   }
 
   @Post(':accountNumber/withdraw')
@@ -26,7 +25,7 @@ export class AccountsController {
     @Param('accountNumber') accountNumber: string,
     @Body('amount') amount: number,
   ): { balance: number } {
-    return this.accountsService.withdraw(accountNumber, amount);
+    return this.transationAccountsService.withdraw(accountNumber, amount);
   }
 
   @Post(':accountNumber/transfer')
@@ -35,7 +34,7 @@ export class AccountsController {
     @Body('destinationAccountNumber') destinationAccountNumber: string,
     @Body('amount') amount: number,
   ): { balance: number } {
-    return this.accountsService.transfer(
+    return this.transationAccountsService.transfer(
       accountNumber,
       destinationAccountNumber,
       amount,
@@ -46,6 +45,6 @@ export class AccountsController {
   getBalance(@Param('accountNumber') accountNumber: string): {
     balance: number;
   } {
-    return this.accountsService.getBalance(accountNumber);
+    return this.transationAccountsService.getBalance(accountNumber);
   }
 }

@@ -1,20 +1,17 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Account } from './account.model';
+import { TransactionAccount } from './transaction-account.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
-export class AccountsService {
-  private accounts: { [key: string]: Account } = {};
+export class TransactionAccountService {
+  private accounts: { [key: string]: TransactionAccount } = {};
 
-  createAccount(
-    accountType: string,
-    clientId: string,
-  ): { accountNumber: string } {
+  createAccount(clientId: string): TransactionAccount {
     const accountNumber = uuidv4().replace(/-/g, '').slice(0, 13);
-    const newAccount = new Account(accountType, clientId);
+    const newAccount = new TransactionAccount(clientId);
     newAccount.accountNumber = accountNumber;
     this.accounts[accountNumber] = newAccount;
-    return { accountNumber };
+    return newAccount;
   }
 
   deposit(accountNumber: string, amount: number): { balance: number } {
@@ -45,7 +42,7 @@ export class AccountsService {
     return { balance: account.verifyBalance() };
   }
 
-  private getAccount(accountNumber: string): Account {
+  private getAccount(accountNumber: string): TransactionAccount {
     const account = this.accounts[accountNumber];
     if (!account) {
       throw new HttpException('Account not found', HttpStatus.NOT_FOUND);

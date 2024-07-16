@@ -1,12 +1,10 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { SavingsAccountsService } from './savings-accounts.service';
+import { SavingsAccountService } from './savings_account.service';
 import { SavingsAccount } from './savings_account.model';
 
 @Controller('savings-accounts')
 export class SavingsAccountsController {
-  constructor(
-    private readonly savingsAccountsService: SavingsAccountsService,
-  ) {}
+  constructor(private readonly savingsAccountsService: SavingsAccountService) {}
 
   @Post('create')
   createAccount(

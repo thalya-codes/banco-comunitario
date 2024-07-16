@@ -1,20 +1,23 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { SavingsAccount } from './savings_account.model';
 import { v4 as uuidv4 } from 'uuid';
+import { SavingsAccountFactory } from './savings_account.factory';
+import { ISavingsAccountService } from './savings_account.interface';
+import { NOT_FOUND_ACCOUNT } from 'src/constants';
 
-interface ISavingsAccountService {
-  createAccount(clientId: string, interestRate: number): SavingsAccount;
-  deposit(accountNumber: string, amount: number): { balance: number };
-}
 @Injectable()
 export class SavingsAccountService implements ISavingsAccountService {
   private accounts: { [key: string]: SavingsAccount } = {};
 
+  constructor(private readonly savingsAccountFactory: SavingsAccountFactory) {}
+
   createAccount(clientId: string, interestRate: number): SavingsAccount {
     const accountNumber = uuidv4().replace(/-/g, '').slice(0, 13);
-    const newAccount = new SavingsAccount(clientId);
+    const newAccount = this.savingsAccountFactory.createAccount(
+      clientId,
+      interestRate,
+    );
     newAccount.accountNumber = accountNumber;
-    newAccount.interestRate = interestRate;
     this.accounts[accountNumber] = newAccount;
     return newAccount;
   }
@@ -55,7 +58,7 @@ export class SavingsAccountService implements ISavingsAccountService {
   private getAccount(accountNumber: string): SavingsAccount {
     const account = this.accounts[accountNumber];
     if (!account) {
-      throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(NOT_FOUND_ACCOUNT, HttpStatus.NOT_FOUND);
     }
     return account;
   }

@@ -9,7 +9,8 @@ export class TransationAccountsController {
 
   @Post('create')
   createAccount(@Body('clientId') clientId: string): { accountNumber: string } {
-    return this.transationAccountsService.createAccount(clientId);
+    const account = this.transationAccountsService.createAccount(clientId);
+    return { accountNumber: account.accountNumber };
   }
 
   @Post(':accountNumber/deposit')

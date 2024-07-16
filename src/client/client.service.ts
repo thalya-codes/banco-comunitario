@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ClientAbstract } from './client.abstract.model';
+import { ClientFactory } from './client.factory';
 import { NOT_EXISTENT_CLIENT } from 'src/constants';
-import { Client } from './client.model';
-import { Manager } from 'src/manager/manager.model';
+import { ManagerAbstract } from 'src/manager/manager.abstract.model';
 import { AccountAbstract } from 'src/account/account.abstract.model';
 
 @Injectable()
 export class ClientService {
-  clients: ClientAbstract[];
+  private clients: ClientAbstract[] = [];
+
+  constructor(private readonly clientFactory: ClientFactory) {}
 
   findAll(): ClientAbstract[] {
     return this.clients;
@@ -15,36 +17,31 @@ export class ClientService {
 
   findById(id: string): ClientAbstract {
     const client = this.clients.find((client) => client.id === id);
-
-    if (!client) throw new Error(NOT_EXISTENT_CLIENT);
-
+    if (!client) throw new NotFoundException(NOT_EXISTENT_CLIENT);
     return client;
   }
 
   delete(id: string) {
-    const client = this.clients.find((client) => client.id === id);
-
-    if (!client) throw new Error(NOT_EXISTENT_CLIENT);
-    this.clients = this.clients.filter((client) => client.id !== id);
+    const clientIndex = this.clients.findIndex((client) => client.id === id);
+    if (clientIndex === -1) throw new NotFoundException(NOT_EXISTENT_CLIENT);
+    this.clients.splice(clientIndex, 1);
   }
 
   update(id: string, updatedClient: ClientAbstract) {
     const clientIndex = this.clients.findIndex((client) => client.id === id);
-
-    if (clientIndex === -1) throw new Error(NOT_EXISTENT_CLIENT);
-
-    this.clients.splice(clientIndex, 0, updatedClient);
+    if (clientIndex === -1) throw new NotFoundException(NOT_EXISTENT_CLIENT);
+    this.clients[clientIndex] = updatedClient;
   }
 
   createClient(
     fullname: string,
     address: string,
     telphone: string,
-    manager: Manager,
+    manager: ManagerAbstract,
     accounts: AccountAbstract[],
     salaryIncome: number,
-  ) {
-    const client = new Client(
+  ): ClientAbstract {
+    const client = this.clientFactory.createClient(
       fullname,
       address,
       telphone,
@@ -52,14 +49,7 @@ export class ClientService {
       accounts,
       salaryIncome,
     );
-
+    this.clients.push(client);
     return client;
   }
 }
-
-// Com o que você me mandou eu entendi que:
-// Model > define o formato e/ou os métodos e atrbibutos relacionados aquele universo
-// Service -> define métodos de manipulação de um modelo
-// Controller -> intecepta a request e executa uma lógica do service
-
-// OBS: me corriga se eu tiver entendido errado

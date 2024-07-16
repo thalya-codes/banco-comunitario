@@ -1,5 +1,5 @@
 import { AccountAbstract } from 'src/account/account.abstract.model';
-import { Manager } from 'src/manager/manager.model';
+import { Manager } from 'src/manager/manager.abstract.model';
 
 export abstract class ClientAbstract {
   protected abstract _id: string;

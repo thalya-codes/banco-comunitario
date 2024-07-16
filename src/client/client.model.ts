@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { AccountAbstract } from '../account/account.abstract.model';
 import { ClientAbstract } from './client.abstract.model';
 import { NOT_FOUND_ACCOUNT } from 'src/constants';
-import { Manager } from 'src/manager/manager.model';
+import { Manager } from 'src/manager/manager.abstract.model';
 
 export class Client extends ClientAbstract {
   protected _id: string = uuidv4();

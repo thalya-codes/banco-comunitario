@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Account } from './account.model';
 import { v4 as uuidv4 } from 'uuid';
+import { NOT_FOUND_ACCOUNT } from 'src/constants';
 
 @Injectable()
 export class AccountsService {
@@ -48,7 +49,7 @@ export class AccountsService {
   private getAccount(accountNumber: string): Account {
     const account = this.accounts[accountNumber];
     if (!account) {
-      throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(NOT_FOUND_ACCOUNT, HttpStatus.NOT_FOUND);
     }
     return account;
   }

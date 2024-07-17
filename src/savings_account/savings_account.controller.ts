@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { SavingsAccountService } from './savings_account.service';
 import { SavingsAccount } from './savings_account.model';
+import { ACCOUNT_PAYMENT_TYPE } from 'src/enums';
 
 @Controller('savings-accounts')
 export class SavingsAccountsController {
@@ -53,5 +54,33 @@ export class SavingsAccountsController {
   @Post(':accountNumber/calculate-interest')
   calculateInterest(@Param('accountNumber') accountNumber: string): void {
     this.savingsAccountsService.calculateInterest(accountNumber);
+  }
+
+  @Post(':accountNumber/payment/pix')
+  doPaymentPix(
+    @Param('accountNumber') accountNumber: string,
+    @Body('destinationAccountNumber') destinationAccountNumber: string,
+    @Body('amount') amount: number,
+  ) {
+    this.savingsAccountsService.payBill(
+      amount,
+      accountNumber,
+      destinationAccountNumber,
+      ACCOUNT_PAYMENT_TYPE.PIX,
+    );
+  }
+
+  @Post(':accountNumber/payment/nak-splip')
+  doPaymentBankSlip(
+    @Body('accountNumber') accountNumber: string,
+    @Body('destinationAccountNumber') destinationAccountNumber: string,
+    @Body('amount') amount: number,
+  ) {
+    this.savingsAccountsService.payBill(
+      amount,
+      accountNumber,
+      destinationAccountNumber,
+      ACCOUNT_PAYMENT_TYPE.BANK_SLIP,
+    );
   }
 }

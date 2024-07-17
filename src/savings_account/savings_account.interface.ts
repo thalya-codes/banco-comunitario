@@ -1,3 +1,4 @@
+import { TPaymentType } from 'src/account/account.abstract.model';
 import { SavingsAccount } from './savings_account.model';
 
 export interface ISavingsAccountService {
@@ -11,6 +12,14 @@ export interface ISavingsAccountService {
   ): { balance: number };
   getBalance(accountNumber: string): { balance: number };
   calculateInterest(accountNumber: string): void;
+  getAccount(accountNumber: string): SavingsAccount;
+  payBill(
+    amount: number,
+    originAccountNumber: string,
+    destinationAccountNumber: string,
+    method: TPaymentType,
+    dueate?: string,
+  ): void;
 }
 
 export interface ISavingsAccountFactory {

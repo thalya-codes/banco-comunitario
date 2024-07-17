@@ -1,7 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { AccountAbstract } from './account.abstract.model';
+import { AccountAbstract, TPaymentType } from './account.abstract.model';
 import { INSUFICIENT_BALANCE } from 'src/constants';
+import { ACCOUNT_PAYMENT_TYPE } from 'src/enums';
+import { Payment } from 'src/payment/payment.model';
 
 @Injectable()
 export class Account extends AccountAbstract {

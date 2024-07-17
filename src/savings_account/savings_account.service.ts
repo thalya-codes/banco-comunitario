@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { SavingsAccountFactory } from './savings_account.factory';
 import { ISavingsAccountService } from './savings_account.interface';
 import { NOT_FOUND_ACCOUNT } from 'src/constants';
+import { AccountsService } from 'src/account/account.service';
+import { TPaymentType } from 'src/account/account.abstract.model';
 
 @Injectable()
 export class SavingsAccountService implements ISavingsAccountService {
@@ -55,11 +57,27 @@ export class SavingsAccountService implements ISavingsAccountService {
     account.calculateInterest();
   }
 
-  private getAccount(accountNumber: string): SavingsAccount {
+  getAccount(accountNumber: string): SavingsAccount {
     const account = this.accounts[accountNumber];
     if (!account) {
       throw new HttpException(NOT_FOUND_ACCOUNT, HttpStatus.NOT_FOUND);
     }
     return account;
+  }
+
+  payBill(
+    amount: number,
+    originAccountNumber: string,
+    destinationAccountNumber: string,
+    method: TPaymentType,
+    dueate?: string,
+  ): void {
+    AccountsService.payBill(
+      amount,
+      originAccountNumber,
+      destinationAccountNumber,
+      method,
+      dueate,
+    );
   }
 }

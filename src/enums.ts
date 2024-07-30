@@ -1,0 +1,9 @@
+export enum ACCOUNT_TYPE {
+  SAVINGS = 'SAVINGS',
+  TRANSACTION = 'TRANSACTION',
+}
+
+export enum ACCOUNT_PAYMENT_TYPE {
+  PIX = 'PIX',
+  BANK_SLIP = 'BANK_SLIP',
+}

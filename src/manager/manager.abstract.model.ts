@@ -1,7 +1,7 @@
 import { AccountAbstract } from 'src/account/account.abstract.model';
 import { Client } from 'src/client/client.model';
 
-export abstract class Manager {
+export abstract class ManagerAbstract {
   protected _id: string;
   protected _fullname: string;
   protected _clients: Client[];

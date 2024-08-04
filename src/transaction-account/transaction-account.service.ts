@@ -1,14 +1,21 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { TransactionAccount } from './transaction-account.model';
 import { v4 as uuidv4 } from 'uuid';
+import { TransactionAccountFactory } from './transaction_account.factory';
+import { ITransactionAccountService } from './transaction_account.interface';
+import { NOT_FOUND_ACCOUNT } from 'src/constants';
 
 @Injectable()
-export class TransactionAccountService {
+export class TransactionAccountService implements ITransactionAccountService {
   private accounts: { [key: string]: TransactionAccount } = {};
+
+  constructor(
+    private readonly transactionAccountFactory: TransactionAccountFactory,
+  ) {}
 
   createAccount(clientId: string): TransactionAccount {
     const accountNumber = uuidv4().replace(/-/g, '').slice(0, 13);
-    const newAccount = new TransactionAccount(clientId);
+    const newAccount = this.transactionAccountFactory.createAccount(clientId);
     newAccount.accountNumber = accountNumber;
     this.accounts[accountNumber] = newAccount;
     return newAccount;
@@ -45,7 +52,7 @@ export class TransactionAccountService {
   private getAccount(accountNumber: string): TransactionAccount {
     const account = this.accounts[accountNumber];
     if (!account) {
-      throw new HttpException('Account not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(NOT_FOUND_ACCOUNT, HttpStatus.NOT_FOUND);
     }
     return account;
   }

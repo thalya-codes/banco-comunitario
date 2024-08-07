@@ -1,35 +1,46 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { Account } from 'src/domain/entities/accounts/account.model';
 import { ErrorMessages } from 'src/domain/enums/errors-messages';
-import { TPaymentType } from 'src/domain/entities/accounts/account.abstract.model';
-import { ACCOUNT_PAYMENT_TYPE } from 'src/domain/enums/enums';
+import {
+  AccountAbstract,
+  TPaymentType,
+} from 'src/domain/entities/accounts/account.abstract.model';
+import { ACCOUNT_PAYMENT_TYPE, ACCOUNT_TYPE } from 'src/domain/enums/enums';
 import { Payment } from 'src/domain/entities/payment/payment.model';
+import { AccountFactory } from '../factory/account.factory';
 
 @Injectable()
 export class AccountsService {
-  private accounts: { [key: string]: Account } = {};
+  private accounts: { [key: string]: AccountAbstract } = {};
 
   createAccount(
-    accountType: string,
+    accountType: ACCOUNT_TYPE,
     clientId: string,
   ): { accountNumber: string } {
     const accountNumber = uuidv4().replace(/-/g, '').slice(0, 13);
-    const newAccount = new Account(accountType, clientId);
+    const newAccount = new AccountFactory().createAccount(
+      accountType,
+      clientId,
+    );
+
     newAccount.accountNumber = accountNumber;
+
     this.accounts[accountNumber] = newAccount;
+
     return { accountNumber };
   }
 
   deposit(accountNumber: string, amount: number): { balance: number } {
     const account = this.getAccount(accountNumber);
     account.deposit(amount);
+
     return { balance: account.verifyBalance() };
   }
 
   withdraw(accountNumber: string, amount: number): { balance: number } {
     const account = this.getAccount(accountNumber);
     account.withdraw(amount);
+
     return { balance: account.verifyBalance() };
   }
 
@@ -40,7 +51,9 @@ export class AccountsService {
   ): { balance: number } {
     const account = this.getAccount(accountNumber);
     const destinationAccount = this.getAccount(destinationAccountNumber);
+
     account.transfer(destinationAccount, amount);
+
     return { balance: account.verifyBalance() };
   }
 
@@ -49,7 +62,7 @@ export class AccountsService {
     return { balance: account.verifyBalance() };
   }
 
-  getAccount(accountNumber: string): Account {
+  getAccount(accountNumber: string): AccountAbstract {
     const account = this.accounts[accountNumber];
     if (!account) {
       throw new HttpException(

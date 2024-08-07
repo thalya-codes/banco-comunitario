@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { ACCOUNT_TYPE } from 'src/domain/enums/enums';
 import { AccountsService } from 'src/domain/services/account.service';
 
 @Controller('accounts')
@@ -7,7 +8,7 @@ export class AccountsController {
 
   @Post('create')
   createAccount(
-    @Body('accountType') accountType: string,
+    @Body('accountType') accountType: ACCOUNT_TYPE,
     @Body('clientId') clientId: string,
   ): { accountNumber: string } {
     return this.accountsService.createAccount(accountType, clientId);

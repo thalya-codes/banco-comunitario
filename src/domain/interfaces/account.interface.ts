@@ -1,4 +1,5 @@
 import { AccountAbstract } from '../entities/accounts/account.abstract.model';
+import { ACCOUNT_TYPE } from '../enums/enums';
 
 export interface IAccountService {
   createAccount(clientId: string): AccountAbstract;
@@ -10,4 +11,8 @@ export interface IAccountService {
     amount: number,
   ): { balance: number };
   getBalance(accountNumber: string): { balance: number };
+}
+
+export interface IAccountFactory {
+  createAccount(type: ACCOUNT_TYPE, clientId: string): AccountAbstract;
 }

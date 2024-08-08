@@ -8,7 +8,7 @@ export class TransactionAccount extends Account {
   private _overdraft: number = 100;
 
   constructor(clientId: string) {
-    super(ACCOUNT_TYPE.TRANSACTION, clientId);
+    super(ACCOUNT_TYPE.SAVINGS, clientId);
   }
 
   withdraw(amount: number): void {

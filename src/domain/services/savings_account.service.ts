@@ -12,6 +12,7 @@ export class SavingsAccountService implements ISavingsAccountService {
 
   constructor(private readonly savingsAccountFactory: SavingsAccountFactory) {}
 
+  //Tem necessidade de ter cobrança de juros na criação?
   createAccount(clientId: string, interestRate: number): SavingsAccount {
     const accountNumber = uuidv4().replace(/-/g, '').slice(0, 13);
     const newAccount = this.savingsAccountFactory.createAccount(

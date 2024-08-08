@@ -39,7 +39,7 @@ export class ManagerService extends ManagerAbstract {
   openAccount(client: Client, accountType: string, interestRate = 0.12): void {
     let account: AccountAbstract;
 
-    if (accountType === ACCOUNT_TYPE.TRANSACTION) {
+    if (accountType === ACCOUNT_TYPE.SAVINGS) {
       if (client.salaryIncome < 500) {
         throw new Error(ErrorMessages.INSUFICIENT_INCOME_SALARY);
       }

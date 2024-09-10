@@ -6,10 +6,13 @@ import { ACCOUNT_TYPE } from 'src/enums';
 export class SavingsAccount extends Account {
   interestRate: number;
 
-  constructor(clientId: string) {
+  constructor(clientId: string, interestRate: number) {
     super(ACCOUNT_TYPE.SAVINGS, clientId);
+    this.interestRate = interestRate;
   }
 
-  //TODO: Implementar método
-  calculateInterest(): void {}
+  calculateInterest(): void {
+    const interest = this._balance * (this.interestRate / 100);
+    this.deposit(interest);
+  }
 }

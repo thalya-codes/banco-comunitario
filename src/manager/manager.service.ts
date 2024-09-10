@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
-import { Manager } from './manager.model';
+import { ManagerAbstract } from './manager.abstract.model';
 import { Client } from 'src/client/client.model';
 import { AccountAbstract } from 'src/account/account.abstract.model';
 import { ACCOUNT_TYPE } from 'src/enums';
@@ -13,7 +13,7 @@ import {
 import { TransactionAccountService } from '../transaction-account/transaction-account.service';
 
 @Injectable()
-export class ManagerService extends Manager {
+export class ManagerService extends ManagerAbstract {
   protected _id: string = uuidv4();
   protected _clients: Client[] = [];
   protected _fullname: string;

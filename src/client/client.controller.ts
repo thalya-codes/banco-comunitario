@@ -1,16 +1,16 @@
 import {
   Controller,
   Get,
-  Param,
-  Delete,
-  Patch,
-  Body,
   Post,
+  Put,
+  Delete,
+  Param,
+  Body,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { ClientAbstract } from './client.abstract.model';
-import { Manager } from 'src/manager/manager.model';
-import { AccountAbstract } from 'src/account/account.abstract.model';
+import { ManagerAbstract } from 'src/manager/manager.abstract.model';
+import { Account } from 'src/account/account.model';
 
 @Controller('clients')
 export class ClientController {
@@ -28,23 +28,25 @@ export class ClientController {
 
   @Delete(':id')
   delete(@Param('id') id: string) {
-    return this.clientService.delete(id);
+    this.clientService.delete(id);
+    return { message: 'Client deleted successfully' };
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updatedClient: ClientAbstract) {
-    return this.clientService.update(id, updatedClient);
+    this.clientService.update(id, updatedClient);
+    return { message: 'Client updated successfully' };
   }
 
-  @Post('create')
+  @Post()
   createClient(
     @Body('fullname') fullname: string,
     @Body('address') address: string,
     @Body('telphone') telphone: string,
-    @Body('manager') manager: Manager,
-    @Body('accounts') accounts: AccountAbstract[],
+    @Body('manager') manager: ManagerAbstract,
+    @Body('accounts') accounts: Account[],
     @Body('salaryIncome') salaryIncome: number,
-  ) {
+  ): ClientAbstract {
     return this.clientService.createClient(
       fullname,
       address,
